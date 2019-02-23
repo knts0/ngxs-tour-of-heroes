@@ -1,2 +1,2 @@
-# [Tour of Heroes](https://github.com/johnpapa/angular-tour-of-heroes) using ngxs
+# [Tour of Heroes](https://angular.jp/tutorial) using ngxs
 This software is released under the MIT License, see LICENSE.
