@@ -31,7 +31,7 @@ export class HeroDetailComponent implements OnInit {
   getHero(): void {
     const id = +this.route.snapshot.paramMap.get('id');
 
-    this.store.dispatch(new HeroAction.Select(id)); // 元のTour of Heroesではサーバに問い合わせているが、処理が重くなるのでクライアントで完結するよう変更している
+    this.store.dispatch(new HeroAction.Select(id));
   }
 
   goBack(): void {
