@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Store, Select } from '@ngxs/store';
-
-import { Hero } from '../hero';
 import { HeroAction } from '../hero.actions';
 import { HeroState } from '../hero.state';
+
+import { Hero } from '../hero';
 import { HeroService } from '../hero.service';
 
 @Component({
