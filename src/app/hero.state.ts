@@ -39,13 +39,13 @@ export class HeroState {
   //////// Selector //////////
   /** ヒーロー一覧 **/
   @Selector()
-  static getHeroes(state: HeroStateModel) {
+  static heroes(state: HeroStateModel) {
     return state.heroes;
   }
 
   /** 選択中のヒーロー **/
   @Selector()
-  static getSelectedHero(state: HeroStateModel) {
+  static selectedHero(state: HeroStateModel) {
     return state.selectedHero;
   }
 

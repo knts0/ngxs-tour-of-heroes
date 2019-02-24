@@ -14,7 +14,7 @@ import { Hero } from '../hero';
 })
 export class HeroesComponent implements OnInit {
   /** ngxs Selector **/
-  @Select(HeroState.getHeroes) heroes$: Observable<Hero[]>
+  @Select(HeroState.heroes) heroes$: Observable<Hero[]>
 
   constructor(
     private store: Store
