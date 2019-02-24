@@ -6,7 +6,6 @@ import { HeroAction } from '../hero.actions';
 import { HeroState } from '../hero.state';
 
 import { Hero } from '../hero';
-import { HeroService } from '../hero.service';
 
 @Component({
   selector: 'app-heroes',
@@ -18,7 +17,6 @@ export class HeroesComponent implements OnInit {
   @Select(HeroState.getHeroes) heroes$: Observable<Hero[]>
 
   constructor(
-    private heroService: HeroService,
     private store: Store
   ) { }
 
@@ -35,15 +33,9 @@ export class HeroesComponent implements OnInit {
     if (!name) { return; }
 
     this.store.dispatch(new HeroAction.Add({ name } as Hero))
-    // this.heroService.addHero({ name } as Hero)
-    //   .subscribe(hero => {
-    //     this.heroes.push(hero);
-    //   });
   }
 
   delete(hero: Hero): void {
-    // this.heroes = this.heroes.filter(h => h !== hero);
-    // this.heroService.deleteHero(hero).subscribe();
     this.store.dispatch(new HeroAction.Delete(hero))
   }
 

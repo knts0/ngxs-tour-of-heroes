@@ -7,8 +7,7 @@ import { Store, Select } from '@ngxs/store';
 import { HeroAction } from '../hero.actions';
 import { HeroState } from '../hero.state';
 
-import { Hero }         from '../hero';
-import { HeroService }  from '../hero.service';
+import { Hero } from '../hero';
 
 @Component({
   selector: 'app-hero-detail',
@@ -21,7 +20,6 @@ export class HeroDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private heroService: HeroService,
     private location: Location,
     private store: Store
   ) {}

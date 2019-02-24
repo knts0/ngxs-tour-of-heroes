@@ -11,24 +11,28 @@ export module HeroAction {
   export class Load {
     static readonly type = LOAD_HERO;
   }
+
   export class Select {
     static readonly type = SELECT_HERO;
 
     constructor(public id: number) {}
   }
+
   export class Add {
     static readonly type = ADD_HERO;
 
-    constructor(public hero: Hero) {}
+    constructor(public payload: Hero) {}
   }
+
   export class Delete {
     static readonly type = DELETE_HERO;
 
-    constructor(public hero: Hero) {}
+    constructor(public payload: Hero) {}
   }
+
   export class Update {
     static readonly type = UPDATE_HERO;
 
-    constructor(public hero: Hero) {}
+    constructor(public payload: Hero) {}
   }
 }

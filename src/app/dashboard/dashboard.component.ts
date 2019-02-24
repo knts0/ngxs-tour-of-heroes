@@ -6,7 +6,6 @@ import { HeroAction } from '../hero.actions';
 import { HeroState } from '../hero.state';
 
 import { Hero } from '../hero';
-import { HeroService } from '../hero.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,7 +17,6 @@ export class DashboardComponent implements OnInit {
   @Select(HeroState.getHeroes) heroes$: Observable<Hero[]>
 
   constructor(
-    // private heroService: HeroService,
     private store: Store
   ) { }
 
@@ -27,8 +25,6 @@ export class DashboardComponent implements OnInit {
   }
 
   getHeroes(): void {
-    // this.heroService.getHeroes()
-      // .subscribe(heroes => this.heroes = heroes.slice(1, 5));
     this.store.dispatch(new HeroAction.Load())
   }
 }
