@@ -1,6 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { Observable } from 'rxjs';
+
+import { Store, Select } from '@ngxs/store';
+import { HeroAction } from '../hero.actions';
+import { HeroState } from '../hero.state';
 
 import { Hero }         from '../hero';
 import { HeroService }  from '../hero.service';
@@ -11,12 +16,14 @@ import { HeroService }  from '../hero.service';
   styleUrls: [ './hero-detail.component.css' ]
 })
 export class HeroDetailComponent implements OnInit {
-  @Input() hero: Hero;
+  /** ngxs Selector **/
+  @Select(HeroState.getSelectedHero) hero$: Observable<Hero>
 
   constructor(
     private route: ActivatedRoute,
     private heroService: HeroService,
-    private location: Location
+    private location: Location,
+    private store: Store
   ) {}
 
   ngOnInit(): void {
@@ -25,16 +32,16 @@ export class HeroDetailComponent implements OnInit {
 
   getHero(): void {
     const id = +this.route.snapshot.paramMap.get('id');
-    this.heroService.getHero(id)
-      .subscribe(hero => this.hero = hero);
+
+    this.store.dispatch(new HeroAction.Select(id)); // 元のTour of Heroesではサーバに問い合わせているが、処理が重くなるのでクライアントで完結するよう変更している
   }
 
   goBack(): void {
     this.location.back();
   }
 
- save(): void {
-    this.heroService.updateHero(this.hero)
+  save(hero: Hero): void {
+    this.store.dispatch(new HeroAction.Update(hero))
       .subscribe(() => this.goBack());
   }
 }

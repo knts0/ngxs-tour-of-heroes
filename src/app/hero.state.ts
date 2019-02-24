@@ -15,12 +15,14 @@ const httpOptions = {
 };
 
 export class HeroStateModel {
+  readonly selectedHero: Hero;
   readonly heroes: Hero[];
 }
 
 @State<HeroStateModel>({
   name: 'heroes',
   defaults: {
+    selectedHero: null,
     heroes: []
   }
 })
@@ -31,11 +33,17 @@ export class HeroState {
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService) { }
+    private messageService: MessageService
+  ) { }
 
   @Selector()
   static getState(state: HeroStateModel) {
     return state;
+  }
+
+  @Selector()
+  static getSelectedHero(state: HeroStateModel) {
+    return state.selectedHero;
   }
 
   @Selector()
@@ -56,6 +64,16 @@ export class HeroState {
         }),
         // catchError(this.handleError('getHeroes', []))
       )
+  }
+  
+  /** IDによりヒーローを選択する。*/
+  @Action(HeroAction.Select)
+  select(ctx: StateContext<HeroStateModel>, action: HeroAction.Select) {
+    const id = action.id;
+    const state = ctx.getState();
+    const selectedHero = state.heroes.find(hero => hero.id === id);
+
+    ctx.patchState({ selectedHero: selectedHero });
   }
 
   //////// Save methods //////////
