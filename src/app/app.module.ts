@@ -36,9 +36,7 @@ import { MessagesComponent }    from './messages/messages.component';
     NgxsModule.forRoot([
       HeroState
     ]),
-    NgxsLoggerPluginModule.forRoot([
-      HeroState
-    ]),
+    NgxsLoggerPluginModule.forRoot(),
   ],
   declarations: [
     AppComponent,
