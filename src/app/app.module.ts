@@ -2,6 +2,7 @@ import { NgModule }       from '@angular/core';
 import { BrowserModule }  from '@angular/platform-browser';
 
 import { NgxsModule } from '@ngxs/store';
+import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { HeroState } from './hero.state';
 
 import { FormsModule }    from '@angular/forms';
@@ -33,6 +34,9 @@ import { MessagesComponent }    from './messages/messages.component';
       InMemoryDataService, { dataEncapsulation: false }
     ),
     NgxsModule.forRoot([
+      HeroState
+    ]),
+    NgxsLoggerPluginModule.forRoot([
       HeroState
     ]),
   ],
