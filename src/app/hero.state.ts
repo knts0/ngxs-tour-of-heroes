@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -9,10 +8,6 @@ import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { Hero } from './hero';
 import { HeroAction } from './hero.actions';
 import { HeroService } from './hero.service';
-
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
 
 export class HeroStateModel {
   readonly selectedHero: Hero;
@@ -29,10 +24,7 @@ export class HeroStateModel {
 
 export class HeroState {
 
-  private heroesUrl = 'api/heroes';  // Web APIのURL
-
   constructor(
-    private http: HttpClient,
     private heroService: HeroService
   ) { }
 
@@ -53,15 +45,13 @@ export class HeroState {
   /** サーバーからヒーローを取得する */
   @Action(HeroAction.Load)
   load(ctx: StateContext<HeroStateModel>) {
-    return this.http.get<Hero[]>(this.heroesUrl)
+    return this.heroService.getHeroes()
       .pipe(
-        tap( heroes => {
-         this.heroService.log('fetched heroes');
+        tap((data) => {
          ctx.patchState({
-           heroes: heroes
+           heroes: data
          });
         }),
-        catchError(this.heroService.handleError('getHeroes', []))
       )
   }
 
@@ -69,42 +59,40 @@ export class HeroState {
   @Action(HeroAction.Select)
   select(ctx: StateContext<HeroStateModel>, action: HeroAction.Select) {
     const id = action.id;
-    const state = ctx.getState();
-    const selectedHero = state.heroes.find(hero => hero.id === id);
-
-    ctx.patchState({ selectedHero: selectedHero });
+    return this.heroService.getHero(id)
+      .pipe(
+        tap((data: Hero) => {
+         ctx.patchState({
+           selectedHero: data
+         });
+        }),
+      )
   }
 
   //////// Save methods //////////
 
   /** POST: サーバーに新しいヒーローを登録する */
   @Action(HeroAction.Add)
-  addHero(ctx: StateContext<HeroStateModel>, action: HeroAction.Add): Observable<Hero> {
+  addHero(ctx: StateContext<HeroStateModel>, action: HeroAction.Add) {
     const hero = action.payload;
 
-    return this.http.post<Hero>(this.heroesUrl, hero, httpOptions).pipe(
+    return this.heroService.addHero(hero).pipe(
       tap((data: Hero) => {
-        this.heroService.log(`added hero w/ id=${data.id}`);
         ctx.dispatch(new HeroAction.Load());
       }),
-      catchError(this.heroService.handleError<Hero>('addHero'))
     );
   }
 
   /** DELETE: サーバーからヒーローを削除 */
   @Action(HeroAction.Delete)
-  deleteHero(ctx: StateContext<HeroStateModel>, action: HeroAction.Delete): Observable<Hero> {
-    // hero: Hero | number): Observable<Hero> {
+  deleteHero(ctx: StateContext<HeroStateModel>, action: HeroAction.Delete) {
     const hero = action.payload;
     const id = typeof hero === 'number' ? hero : hero.id;
-    const url = `${this.heroesUrl}/${id}`;
 
-    return this.http.delete<Hero>(url, httpOptions).pipe(
+    return this.heroService.deleteHero(hero).pipe(
       tap(_ => {
-        this.heroService.log(`deleted hero id=${id}`);
         ctx.dispatch(new HeroAction.Load());
       }),
-      catchError(this.heroService.handleError<Hero>('deleteHero'))
     );
   }
 
@@ -113,9 +101,6 @@ export class HeroState {
   updateHero(ctx: StateContext<HeroStateModel>, action: HeroAction.Update): Observable<any> {
     const hero = action.payload;
 
-    return this.http.put(this.heroesUrl, hero, httpOptions).pipe(
-      tap(_ => this.heroService.log(`updated hero id=${hero.id}`)),
-      catchError(this.heroService.handleError<any>('updateHero'))
-    );
+    return this.heroService.updateHero(hero);
   }
 }
