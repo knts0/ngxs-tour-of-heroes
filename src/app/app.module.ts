@@ -1,5 +1,9 @@
 import { NgModule }       from '@angular/core';
 import { BrowserModule }  from '@angular/platform-browser';
+
+import { NgxsModule } from '@ngxs/store';
+import { HeroState } from './hero.state';
+
 import { FormsModule }    from '@angular/forms';
 import { HttpClientModule }    from '@angular/common/http';
 
@@ -27,7 +31,10 @@ import { MessagesComponent }    from './messages/messages.component';
     // Remove it when a real server is ready to receive requests.
     HttpClientInMemoryWebApiModule.forRoot(
       InMemoryDataService, { dataEncapsulation: false }
-    )
+    ),
+    NgxsModule.forRoot([
+      HeroState
+    ]),
   ],
   declarations: [
     AppComponent,
