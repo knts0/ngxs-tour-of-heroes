@@ -1,7 +1,5 @@
-import { Injectable } from '@angular/core';
-
-import { Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { tap, finalize } from 'rxjs/operators';
 
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 
@@ -77,9 +75,9 @@ export class HeroState {
     const hero = action.payload;
 
     return this.heroService.addHero(hero).pipe(
-      tap((data: Hero) => {
+      finalize(() => {
         ctx.dispatch(new HeroAction.Load());
-      }),
+      })
     );
   }
 
@@ -90,7 +88,7 @@ export class HeroState {
     const id = typeof hero === 'number' ? hero : hero.id;
 
     return this.heroService.deleteHero(hero).pipe(
-      tap(_ => {
+      finalize(() => {
         ctx.dispatch(new HeroAction.Load());
       }),
     );
