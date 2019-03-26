@@ -8,8 +8,8 @@ import { HeroAction } from './hero.actions';
 import { HeroService } from './hero.service';
 
 export class HeroStateModel {
-  readonly selectedHero: Hero;
-  readonly heroes: Hero[];
+  selectedHero: Hero;
+  heroes: Hero[];
 }
 
 @State<HeroStateModel>({
